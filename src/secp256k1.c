@@ -22,7 +22,7 @@ void secp256k1_stop(void) {
 
 int secp256k1_ecdsa_verify(const unsigned char *msg, int msglen, const unsigned char *sig, int siglen, const unsigned char *pubkey, int pubkeylen) {
     int ret = -3;
-    secp256k1_num_t m; 
+    secp256k1_num_t m;
     secp256k1_num_init(&m);
     secp256k1_ecdsa_sig_t s;
     secp256k1_ecdsa_sig_init(&s);
@@ -135,6 +135,23 @@ int secp256k1_ecdsa_pubkey_create(unsigned char *pubkey, int *pubkeylen, const u
     secp256k1_ge_t p;
     secp256k1_ge_set_gej(&p, &pj);
     secp256k1_ecdsa_pubkey_serialize(&p, pubkey, pubkeylen, compressed);
+    return 1;
+}
+
+int secp256k1_ecdsa_pubkey_and_compr_create(unsigned char *pubkey,
+                                            int *pubkeylen,
+                                            unsigned char *pubkey_compr,
+                                            int *pubkeylen_compr,
+                                            const unsigned char *seckey) {
+    secp256k1_num_t sec;
+    secp256k1_num_init(&sec);
+    secp256k1_num_set_bin(&sec, seckey, 32);
+    secp256k1_gej_t pj;
+    secp256k1_ecmult_gen(&pj, &sec);
+    secp256k1_ge_t p;
+    secp256k1_ge_set_gej(&p, &pj);
+    secp256k1_ecdsa_pubkey_serialize(&p, pubkey, pubkeylen, 0);
+    secp256k1_ecdsa_pubkey_serialize(&p, pubkey_compr, pubkeylen_compr, 1);
     return 1;
 }
 

@@ -99,6 +99,13 @@ int secp256k1_ecdsa_pubkey_verify(const unsigned char *pubkey, int pubkeylen);
  */
 int secp256k1_ecdsa_pubkey_create(unsigned char *pubkey, int *pubkeylen, const unsigned char *seckey, int compressed);
 
+// create pubkey and compressed pubkey in one step
+int secp256k1_ecdsa_pubkey_and_compr_create(unsigned char *pubkey,
+                                            int *pubkeylen,
+                                            unsigned char *pubkey_compr,
+                                            int *pubkeylen_compr,
+                                            const unsigned char *seckey);
+
 int secp256k1_ecdsa_pubkey_decompress(unsigned char *pubkey, int *pubkeylen);
 
 int secp256k1_ecdsa_privkey_export(const unsigned char *seckey,
